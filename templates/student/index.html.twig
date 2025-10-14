@@ -1,0 +1,33 @@
+
+
+{{moy2}}
+<br>
+{{students[0]}}
+{{students[2]}}
+
+{% set total = 20 %}
+
+{{total}}
+{% set hour = 20 %}
+
+<br>
+{% if hour < 12 %}
+<p>Bonjour ! </p>
+
+{% elseif hour < 18 %}
+<p>Bon après-midi!</p>
+
+{% else %}
+<p>Bonsoir !</p>
+{% endif %}
+
+{% for i in 0..9 %} 
+{{ i }}
+{% endfor %}
+<p>le nombre d'etudiants:</p> {{students | length}}
+<br>
+{% set tab = [1, 5, 2, 3] %}
+{{ min(tab) }} 
+
+<br>
+<img src="{{ asset ('images/pic1.jpg') }}" alt="twig"/>
