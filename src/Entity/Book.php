@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
@@ -30,7 +31,7 @@ class Book
     private ?Author $author = null;
 
     #[ORM\OneToOne(inversedBy: 'book', cascade: ['persist', 'remove'])]
-    private ?student $student = null;
+    private ?Student $student = null;
 
     /**
      * @var Collection<int, Reader>

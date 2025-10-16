@@ -40,4 +40,11 @@ class AuthorRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+//DQL
+ public function getAuthorsOrdredByNameDQL(){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("Select a from App\Entity\Author a order by a.name ASC");
+        return $query->getResult();
+
+    }
 }
