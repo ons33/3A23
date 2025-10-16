@@ -47,4 +47,12 @@ class AuthorRepository extends ServiceEntityRepository
         return $query->getResult();
 
     }
+//QB
+    public function getAuthorsOrdredByName(){
+        //$req = "Select * from author as a order by a.name";
+        $reqQueryBuilder = $this->createQueryBuilder('a')
+                                ->orderBy('a.name','ASC');
+        $query = $reqQueryBuilder->getQuery();
+        return $query->getResult();
+    }
 }
