@@ -15,14 +15,14 @@ class Author
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
+    #[ORM\Column(length: 50)]
+    private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $email = null;
 
     /**
-     * @var Collection<int, book>
+     * @var Collection<int, Book>
      */
     #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $books;
@@ -32,19 +32,22 @@ class Author
         $this->books = new ArrayCollection();
     }
 
+    
+  
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getName(): ?string
     {
-        return $this->username;
+        return $this->name;
     }
 
-    public function setUsername(string $username): static
+    public function setName(string $name): static
     {
-        $this->username = $username;
+        $this->name = $name;
 
         return $this;
     }
@@ -62,14 +65,14 @@ class Author
     }
 
     /**
-     * @return Collection<int, book>
+     * @return Collection<int, Book>
      */
     public function getBooks(): Collection
     {
         return $this->books;
     }
 
-    public function addBook(book $book): static
+    public function addBook(Book $book): static
     {
         if (!$this->books->contains($book)) {
             $this->books->add($book);
@@ -79,7 +82,7 @@ class Author
         return $this;
     }
 
-    public function removeBook(book $book): static
+    public function removeBook(Book $book): static
     {
         if ($this->books->removeElement($book)) {
             // set the owning side to null (unless already changed)
@@ -90,4 +93,13 @@ class Author
 
         return $this;
     }
+
+  
+public function __toString()
+{
+    return $this->email;
+}
+
+
+
 }

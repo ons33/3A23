@@ -3,11 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -17,11 +14,11 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $publicationDate = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $publicationDate = null;
 
     #[ORM\Column]
     private ?bool $enabled = null;
@@ -29,20 +26,6 @@ class Book
     #[ORM\ManyToOne(inversedBy: 'books')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Author $author = null;
-
-    #[ORM\OneToOne(inversedBy: 'book', cascade: ['persist', 'remove'])]
-    private ?Student $student = null;
-
-    /**
-     * @var Collection<int, Reader>
-     */
-    #[ORM\ManyToMany(targetEntity: Reader::class, mappedBy: 'books')]
-    private Collection $readers;
-
-    public function __construct()
-    {
-        $this->readers = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -61,12 +44,12 @@ class Book
         return $this;
     }
 
-    public function getPublicationDate(): ?\DateTime
+    public function getPublicationDate(): ?\DateTimeInterface
     {
         return $this->publicationDate;
     }
 
-    public function setPublicationDate(\DateTime $publicationDate): static
+    public function setPublicationDate(\DateTimeInterface $publicationDate): static
     {
         $this->publicationDate = $publicationDate;
 
@@ -85,54 +68,19 @@ class Book
         return $this;
     }
 
-    public function getAuthor(): ?Author
+    public function getAuthor(): ?author
     {
         return $this->author;
     }
 
-    public function setAuthor(?Author $author): static
+    public function setAuthor(?author $author): static
     {
         $this->author = $author;
 
         return $this;
     }
 
-    public function getStudent(): ?student
-    {
-        return $this->student;
-    }
 
-    public function setStudent(?student $student): static
-    {
-        $this->student = $student;
 
-        return $this;
-    }
 
-    /**
-     * @return Collection<int, Reader>
-     */
-    public function getReaders(): Collection
-    {
-        return $this->readers;
-    }
-
-    public function addReader(Reader $reader): static
-    {
-        if (!$this->readers->contains($reader)) {
-            $this->readers->add($reader);
-            $reader->addBook($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReader(Reader $reader): static
-    {
-        if ($this->readers->removeElement($reader)) {
-            $reader->removeBook($this);
-        }
-
-        return $this;
-    }
 }

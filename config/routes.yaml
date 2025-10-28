@@ -3,3 +3,8 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+#route Name
+index:
+    path: /hello
+    controller: App\Controller\StudentController::helloAction

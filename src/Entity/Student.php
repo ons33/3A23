@@ -13,28 +13,28 @@ class Student
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $name = null;
-
     #[ORM\Column(length: 255)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
-    private ?Book $book = null;
+    #[ORM\Column(nullable: true)]
+    private ?float $moyenne = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getUsername(): ?string
     {
-        return $this->name;
+        return $this->username;
     }
 
-    public function setName(?string $name): static
+    public function setUsername(string $username): static
     {
-        $this->name = $name;
+        $this->username = $username;
 
         return $this;
     }
@@ -44,31 +44,21 @@ class Student
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getBook(): ?Book
+    public function getMoyenne(): ?float
     {
-        return $this->book;
+        return $this->moyenne;
     }
 
-    public function setBook(?Book $book): static
+    public function setMoyenne(?float $moyenne): static
     {
-        // unset the owning side of the relation if necessary
-        if ($book === null && $this->book !== null) {
-            $this->book->setStudent(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($book !== null && $book->getStudent() !== $this) {
-            $book->setStudent($this);
-        }
-
-        $this->book = $book;
+        $this->moyenne = $moyenne;
 
         return $this;
     }
