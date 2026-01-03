@@ -12,7 +12,7 @@ EXTENSIONS = ('.js', '.ts', '.py', '.java', '.cs', '.php', '.rb', '.go', '.cpp',
 THRESHOLD = 50   # Score threshold to consider AI-generated
 FAIL_CI = True   # If True, exit(1) when score < threshold
 
-REPORT_FILE = "ai_detection_report.txt"  # Optional: save report to file
+REPORT_FILE = "ai_detection_report.txt"  # Save report
 
 # ===========================
 # REGEX PATTERNS
@@ -31,6 +31,7 @@ validation_pattern = re.compile(r'if\s*\(.+required.+\)|form.*isValid', flags=re
 todo_pattern = re.compile(r'TODO|FIXME|TEMP', flags=re.IGNORECASE)
 naming_pattern = re.compile(r'\b([a-z]+[A-Z][a-zA-Z0-9]*)\b')  # camelCase
 hardcoded_string_pattern = re.compile(r'["\'].*?["\']')
+try_catch_pattern = re.compile(r'\btry\b|\bcatch\b|\bfinally\b', flags=re.IGNORECASE)  # Error handling
 
 # ===========================
 # COUNTERS
@@ -43,14 +44,12 @@ todo_count = 0
 naming_issues = 0
 hardcoded_strings = 0
 blank_lines = 0
+error_handling_count = 0
 
 # ===========================
 # ERROR HANDLING
 # ===========================
 try:
-    # ===========================
-    # ANALYZE CODE
-    # ===========================
     for root, dirs, files in os.walk(CODE_DIR):
         for file in files:
             if file.endswith(EXTENSIONS):
@@ -86,6 +85,9 @@ try:
                 # Blank lines
                 blank_lines += sum(1 for line in code.splitlines() if line.strip() == '')
 
+                # Error Handling Pattern
+                error_handling_count += len(try_catch_pattern.findall(code))
+
     # ===========================
     # HEURISTIC SCORING
     # ===========================
@@ -114,19 +116,20 @@ try:
         f"Inconsistent naming issues: {naming_issues}",
         f"Hardcoded strings: {hardcoded_strings}",
         f"Blank lines formatting issues: {blank_lines}",
+        f"Error Handling Pattern (try/catch/finally): {error_handling_count}",
         ""
     ]
 
     if score < THRESHOLD:
-        report_lines.append("Overall assessment: The code exhibits multiple human-written characteristics including emoji comments, inconsistent naming conventions, mixed language usage, placeholder code, and formatting irregularities. These traits strongly suggest human authorship rather than AI generation.")
+        report_lines.append("Overall assessment: The code exhibits multiple human-written characteristics including emoji comments, inconsistent naming conventions, mixed language usage, placeholder code, formatting irregularities, and error handling patterns. These traits strongly suggest human authorship rather than AI generation.")
         report_lines.append("⚠️ Code may be AI-generated. Failing CI." if FAIL_CI else "⚠️ Code may be AI-generated. CI continues.")
     else:
-        report_lines.append("Overall assessment: The code may exhibit characteristics similar to AI-generated code (uniform style, fewer placeholders, consistent naming).")
+        report_lines.append("Overall assessment: The code may exhibit characteristics similar to AI-generated code (uniform style, fewer placeholders, consistent naming, minimal try/catch).")
 
     report_text = "\n".join(report_lines)
     print(report_text)
 
-    # Save report to file
+    # Save report
     with open(REPORT_FILE, "w", encoding="utf-8") as f:
         f.write(report_text)
 
