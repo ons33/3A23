@@ -11,6 +11,7 @@ class Service2Controller extends AbstractController
     #[Route('/service2/{id}', name: 'app_service2')]
     public function index($id): Response
     {
+        // 😎✨🚀🐍💻🔍📝🎯✅🔥
         return $this->render('service2/index.html.twig', [
             'controller_name' => 'Service2Controller',
         ]);

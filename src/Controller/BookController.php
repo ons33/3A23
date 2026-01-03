@@ -15,13 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BookController extends AbstractController
 {
-   
+//    👈
     #[Route("/book/get/all",name:'app_book_getall')]
     public function getAllbooks(BookRepository $repo) {
         $books= $repo->findAll();
         return $this->render('book/listbooks.html.twig',['books'=>$books]);
     }
-
+// 😎✨🚀🐍💻🔍📝🎯✅🔥
     #[Route('/book/add',name:'app_book_add')]
     public function addbook(Request $req,EntityManagerInterface $em,AuthorRepository $repo){
         $book = new Book();
