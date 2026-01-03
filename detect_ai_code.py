@@ -60,4 +60,18 @@ ai_likelihood = 100 - (
     (informal_comments_count > 0)*20 +
     (validation_count > 0)*10
 )
-ai_likelihood = max(0, min(ai_l
+ai_likelihood = max(0, min(ai_likelihood, 100))
+
+# Affichage du rapport
+print("\n=== Detection Report ===")
+print(f"AI Likelihood: {ai_likelihood}%")
+print(f"Language Choice: {'French strings detected' if french_strings_count>0 else 'No French strings detected'}")
+print(f"Emoji Usage: {emoji_count} emoji(s) found" if emoji_count>0 else "Emoji Usage: None")
+print(f"Comment Style: {informal_comments_count} informal comment(s) detected" if informal_comments_count>0 else "Comment Style: None")
+print(f"Error Handling Pattern: {validation_count} minimal validation check(s) detected" if validation_count>0 else "Error Handling Pattern: None")
+
+# Optionnel : fail CI si AI likelihood > threshold
+THRESHOLD = 50
+if ai_likelihood > THRESHOLD:
+    print("\n⚠️ Code may be AI-generated. Failing CI.")
+    exit(1)
