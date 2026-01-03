@@ -1,7 +1,7 @@
 name: AI Code Detection
 
 on:
-  pull_request:
+  push:
     branches: [ main, develop ]
 
 jobs:
