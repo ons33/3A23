@@ -44,14 +44,31 @@ class BookController extends AbstractController
         
     }
 
-    #[Route('/book/update/{id}',name:'app_book_update')]
-    public function updatebook(EntityManagerInterface $em,$id
-    ,bookRepository $repo){
+#[Route('/book/update/{id}', name: 'app_book_update')]
+public function updateBook(EntityManagerInterface $em, int $id, BookRepository $repo): Response
+{
+    try {
         $book = $repo->find($id);
-        $book->setTitle('book updated');
+
+        if (!$book) {
+            // Livre non trouvé
+            $this->addFlash('error', 'Livre introuvable.');
+            return $this->redirectToRoute('app_book_getall');
+        }
+
+        $book->setTitle('Book updated');
         $em->flush();
+
+        $this->addFlash('success', 'Livre mis à jour avec succès.');
+        return $this->redirectToRoute('app_book_getall');
+
+    } catch (\Exception $e) {
+        // Gérer toute autre erreur inattendue
+        $this->addFlash('error', 'Une erreur est survenue : ' . $e->getMessage());
         return $this->redirectToRoute('app_book_getall');
     }
+}
+
 
      #[Route('/book/delete/{id}',name:'app_book_delete')]
     public function deletebook(ManagerRegistry $manager,$id
