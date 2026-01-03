@@ -71,7 +71,7 @@ class StudentController extends AbstractController{
             "students"=>$repo->findAll()
         ]);
     }
-
+//🚀🐍💻🔍
     #[Route('/student/delete/{id}',name:"app_student_delete")]
     public function deleteStudent($id,ManagerRegistry $manager,StudentRepository $repo){
         $student = $repo->find($id);
